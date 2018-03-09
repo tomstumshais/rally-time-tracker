@@ -1,0 +1,60 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title text-center>Time Tracker</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-grid>
+    <ion-row justify-content-center>
+
+      <ion-col col-sm-12 col-md-10 col-lg-8 col-xl-6 text-center>
+        <ion-list>
+          <ion-list-header>
+            <ion-grid>
+              <ion-row>
+                <ion-col col-2 text-center>
+                  Car Nr.
+                </ion-col>
+                <ion-col col-5 text-center>
+                  Driver
+                </ion-col>
+                <ion-col col-5 text-center>
+                  Time
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-list-header>
+
+
+          <ion-item *ngFor="let driver of driversData">
+            <ion-row>
+              <ion-col col-2 text-center>
+                {{ driver.number }}
+              </ion-col>
+              <ion-col col-5 text-center>
+                {{ driver.driver }}
+              </ion-col>
+              <ion-col col-5 text-center>
+                {{ driver.time }}
+              </ion-col>
+            </ion-row>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+
+    </ion-row>
+    <ion-row justify-content-center>
+
+      <ion-col col-sm-12 col-md-6 col-lg-3 col-xl-2>
+        <button ion-button outline block (click)="sendData()">Send</button>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

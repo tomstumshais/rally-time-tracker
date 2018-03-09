@@ -6,11 +6,15 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
 import { LoginPage } from "../pages/login/login";
+import { CheckpointsPage } from "../pages/checkpoints/checkpoints";
+import { TimeTrackerPage } from "../pages/time-tracker/time-tracker";
 
 @NgModule({
   declarations: [
     MyApp,
-    LoginPage
+    LoginPage,
+    CheckpointsPage,
+    TimeTrackerPage
   ],
   imports: [
     BrowserModule,
@@ -19,7 +23,9 @@ import { LoginPage } from "../pages/login/login";
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    LoginPage
+    LoginPage,
+    CheckpointsPage,
+    TimeTrackerPage
   ],
   providers: [
     StatusBar,
