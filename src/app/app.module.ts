@@ -8,6 +8,7 @@ import { MyApp } from './app.component';
 import { LoginPage } from "../pages/login/login";
 import { CheckpointsPage } from "../pages/checkpoints/checkpoints";
 import { TimeTrackerPage } from "../pages/time-tracker/time-tracker";
+import { DataServiceProvider } from '../providers/data-service/data-service';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { TimeTrackerPage } from "../pages/time-tracker/time-tracker";
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    DataServiceProvider
   ]
 })
 export class AppModule {}

@@ -19,7 +19,7 @@ export class CheckpointsPage {
   }
 
   goNext() {
-    this.navCtrl.setRoot(TimeTrackerPage);
+    this.navCtrl.push(TimeTrackerPage);
   }
 
 }
