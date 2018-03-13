@@ -11,6 +11,15 @@ export class TimeTrackerPage {
   parameters: any;
   drivers: any;
   selectedPoint: any;
+  timeFieldFormats: any = {
+    A: 'HH:MM',
+    B: 'HH:MM:SS.MS',
+    F: 'HH:MM:SS.M',
+    G: 'HH:MM:SS',
+    Q: 'HH:MM:SS.MSX',
+    T: 'HH:MM',
+    Z: 'HH:MM:SS.MSX'
+  };
 
   driversData: Array<Object> = [
     {
