@@ -13,10 +13,8 @@
       <ion-col col-12 col-sm-8 col-md-5 col-lg-4 col-xl-3 text-center>
         <ion-item>
           <ion-label stacked>Select Checkpoint</ion-label>
-          <ion-select>
-            <ion-option value="nes" selected="true">START</ion-option>
-            <ion-option value="n64">TC</ion-option>
-            <ion-option value="ps">FINISH</ion-option>
+          <ion-select [(ngModel)]="selectedPointID">
+            <ion-option *ngFor="let point of points" value="{{ point.ID }}">{{ point.Name }}</ion-option>
           </ion-select>
         </ion-item>
         <button ion-button outline block (click)="goNext()">Next</button>

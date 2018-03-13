@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, ToastController } from 'ionic-angular';
 
 import { CheckpointsPage } from '../checkpoints/checkpoints';
+import { DataServiceProvider } from "../../providers/data-service/data-service";
 
 @Component({
   selector: 'page-login',
@@ -13,16 +14,44 @@ export class LoginPage {
 
   constructor(
     public navCtrl: NavController, 
-    public navParams: NavParams
+    public navParams: NavParams,
+    private toastCtrl: ToastController,
+    private dataService: DataServiceProvider
   ) {}
 
-  ionViewDidLoad() {
-    // ..
+  checkAccessCode() {
+    this.dataService.checkAccess(this.accessCode)
+      .subscribe((data: any) => {
+        if (data && data.Parameters && data.Parameters.length) {
+          // check if access is allowed
+          const isAllowed = data.Parameters.find((param) => {
+            return param.Code === "Access" && param.Value === "Allowed";
+          });
+
+          if (isAllowed) {
+            console.log(`Access Code: ${this.accessCode}`);
+            this.navCtrl.setRoot(CheckpointsPage, {
+              parameters: data.Parameters,
+              points: data.Points,
+              drivers: data.Drivers
+            });
+          } else {
+            this.showToast('Access is denied!');
+          }
+        } else {
+          this.showToast('Access is denied!');
+        }
+      });
   }
 
-  checkAccessCode() {
-    console.log(`Access Code: ${this.accessCode}`);
-    this.navCtrl.setRoot(CheckpointsPage);
+  showToast(message: string) {
+    const toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+      position: 'bottom'
+    });
+  
+    toast.present();
   }
 
 }
