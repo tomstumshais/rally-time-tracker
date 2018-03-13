@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, ToastController } from 'ionic-angular';
 import { Serial } from '@ionic-native/serial';
 
 @Component({
@@ -36,6 +36,7 @@ export class TimeTrackerPage {
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
+    private toastCtrl: ToastController,
     private serial: Serial
   ) {
     this.parameters = this.navParams.get('parameters');
@@ -51,7 +52,7 @@ export class TimeTrackerPage {
     this.serial.requestPermission().then(() => {
       console.log('Request Permission done');
       this.serial.open({
-        baudRate: 9800,
+        baudRate: 9600,
         dataBits: 8,
         stopBits: 1,
         parity: 0,
@@ -60,8 +61,24 @@ export class TimeTrackerPage {
         sleepOnPause: false
       }).then(() => {
         console.log('Serial connection opened');
+        this.serial.registerReadCallback()
+          .subscribe((data) => {
+            // output incoming data
+            console.log(data);
+            this.showToast(data);
+          });
       });
     }).catch((error: any) => console.log(error));
+  }
+
+  showToast(message: string) {
+    const toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+      position: 'bottom'
+    });
+  
+    toast.present();
   }
 
 }
