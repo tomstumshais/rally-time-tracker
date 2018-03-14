@@ -67,7 +67,9 @@ export class TimeTrackerPage {
         this.serial.registerReadCallback()
           .subscribe((data) => {
             // output incoming data
-            this.showToast(data);
+            const charCodes = new Uint8Array(data);
+            const chars = String.fromCharCode.apply(null, charCodes);
+            this.showToast(chars);
             console.log(data);
           });
       });
