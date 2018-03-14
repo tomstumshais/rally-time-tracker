@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ToastController } from 'ionic-angular';
-import { Serial } from '@ionic-native/serial';
+// import { Serial } from '@ionic-native/serial';
 
 @Component({
   selector: 'page-time-tracker',
@@ -37,7 +37,7 @@ export class TimeTrackerPage {
     public navCtrl: NavController, 
     public navParams: NavParams,
     private toastCtrl: ToastController,
-    private serial: Serial
+    // private serial: Serial
   ) {
     this.parameters = this.navParams.get('parameters');
     this.selectedPoint = this.navParams.get('point');
@@ -50,31 +50,31 @@ export class TimeTrackerPage {
 
   sendData() {
     // test Serial port connection
-    this.serial.requestPermission().then(() => {
-      this.showToast('Request Permission done');
-      console.log('Request Permission done');
-      this.serial.open({
-        baudRate: 9600,
-        dataBits: 8,
-        stopBits: 1,
-        parity: 0,
-        dtr: false,
-        rts: false,
-        sleepOnPause: false
-      }).then(() => {
-        this.showToast('Serial connection opened');
-        console.log('Serial connection opened');
-        this.serial.registerReadCallback()
-          .subscribe((data) => {
-            // output incoming data
-            this.showToast(data);
-            console.log(data);
-          });
-      });
-    }).catch((error: any) => {
-      this.showToast(error);
-      console.log(error);
-    });
+    // this.serial.requestPermission().then(() => {
+    //   this.showToast('Request Permission done');
+    //   console.log('Request Permission done');
+    //   this.serial.open({
+    //     baudRate: 9600,
+    //     dataBits: 8,
+    //     stopBits: 1,
+    //     parity: 0,
+    //     dtr: false,
+    //     rts: false,
+    //     sleepOnPause: false
+    //   }).then(() => {
+    //     this.showToast('Serial connection opened');
+    //     console.log('Serial connection opened');
+    //     this.serial.registerReadCallback()
+    //       .subscribe((data) => {
+    //         // output incoming data
+    //         this.showToast(data);
+    //         console.log(data);
+    //       });
+    //   });
+    // }).catch((error: any) => {
+    //   this.showToast(error);
+    //   console.log(error);
+    // });
   }
 
   showToast(message: string) {
