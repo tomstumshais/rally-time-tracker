@@ -49,7 +49,9 @@ export class TimeTrackerPage {
   }
 
   sendData() {
+    // test Serial port connection
     this.serial.requestPermission().then(() => {
+      this.showToast('Request Permission done');
       console.log('Request Permission done');
       this.serial.open({
         baudRate: 9600,
@@ -60,15 +62,19 @@ export class TimeTrackerPage {
         rts: false,
         sleepOnPause: false
       }).then(() => {
+        this.showToast('Serial connection opened');
         console.log('Serial connection opened');
         this.serial.registerReadCallback()
           .subscribe((data) => {
             // output incoming data
-            console.log(data);
             this.showToast(data);
+            console.log(data);
           });
       });
-    }).catch((error: any) => console.log(error));
+    }).catch((error: any) => {
+      this.showToast(error);
+      console.log(error);
+    });
   }
 
   showToast(message: string) {
