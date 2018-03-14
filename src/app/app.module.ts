@@ -3,6 +3,7 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+import { Serial } from '@ionic-native/serial';
 import { HttpClientModule } from '@angular/common/http';
 
 import { MyApp } from './app.component';
@@ -33,6 +34,7 @@ import { DataServiceProvider } from '../providers/data-service/data-service';
   providers: [
     StatusBar,
     SplashScreen,
+    Serial,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     DataServiceProvider
   ]
