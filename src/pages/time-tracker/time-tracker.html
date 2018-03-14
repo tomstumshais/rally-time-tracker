@@ -4,6 +4,10 @@
     <ion-title text-center>Time Tracker</ion-title>
   </ion-navbar>
 
+  <ion-toolbar color="primary">
+    <ion-title text-center>{{ eventName }}</ion-title>
+  </ion-toolbar>
+
 </ion-header>
 
 
@@ -11,7 +15,13 @@
 
   <ion-grid>
     <ion-row justify-content-center>
+      <ion-col col-sm-12 col-md-6 col-lg-3 col-xl-2>
+        <h3>
+          <span>Checkpoint: </span>{{ selectedPoint.Name }}</h3>
+      </ion-col>
+    </ion-row>
 
+    <ion-row justify-content-center>
       <ion-col col-sm-12 col-md-10 col-lg-8 col-xl-6 text-center>
         <ion-list>
           <ion-list-header>
@@ -30,11 +40,10 @@
             </ion-grid>
           </ion-list-header>
 
-
           <ion-item *ngFor="let driver of driversData">
             <ion-row>
               <ion-col col-2 text-center>
-                {{ driver.number }}
+                <ion-input type="text" [(ngModel)]="driver.number" name="title"></ion-input>
               </ion-col>
               <ion-col col-5 text-center>
                 {{ driver.driver }}
@@ -43,17 +52,25 @@
                 {{ driver.time }}
               </ion-col>
             </ion-row>
+
+            <!-- <ion-item>
+                <ion-label >Label</ion-label>
+                <ion-input type="text"  readonly="true"></ion-input>
+                <div class="buttons" item-right>
+                  <button ion-button >
+                    Go!
+                  </button>
+                </div>
+              </ion-item> -->
           </ion-item>
         </ion-list>
       </ion-col>
-
     </ion-row>
-    <ion-row justify-content-center>
 
+    <ion-row justify-content-center>
       <ion-col col-sm-12 col-md-6 col-lg-3 col-xl-2>
         <button ion-button outline block (click)="sendData()">Send</button>
       </ion-col>
-
     </ion-row>
   </ion-grid>
 

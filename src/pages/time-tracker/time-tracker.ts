@@ -9,6 +9,9 @@ import { Serial } from '@ionic-native/serial';
 export class TimeTrackerPage {
 
   parameters: any;
+  eventID: string | number;
+  eventName: string;
+  resendIntensity: string | number;
   drivers: any;
   selectedPoint: any;
   timeFieldFormats: any = {
@@ -42,6 +45,13 @@ export class TimeTrackerPage {
     this.parameters = this.navParams.get('parameters');
     this.selectedPoint = this.navParams.get('point');
     this.drivers = this.navParams.get('drivers');
+
+    // get all parameter's values
+    this.parameters.forEach((param) => {
+      if (param.Code === "EventID") this.eventID = param.Value;
+      if (param.Code === "EventName") this.eventName = param.Value;
+      if (param.Code === "ResendIntensity") this.resendIntensity = param.Value;
+    });
   }
 
   ionViewDidLoad() {
