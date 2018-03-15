@@ -24,7 +24,7 @@
     <ion-row justify-content-center>
       <ion-col col-sm-12 col-md-10 col-lg-8 col-xl-6 text-center>
         <ion-list>
-          <ion-list-header>
+          <ion-list-header no-margin no-padding>
             <ion-grid>
               <ion-row>
                 <ion-col col-3 text-center>
@@ -40,16 +40,16 @@
             </ion-grid>
           </ion-list-header>
 
-          <ion-grid *ngFor="let driver of driversData">
+          <ion-grid *ngFor="let driver of driversData" no-padding>
             <ion-row>
               <ion-col ion-item col-3>
-                  <ion-input type="text" maxlength="3" [(ngModel)]="driver.number" name="number"></ion-input>
+                <ion-input type="text" maxlength="3" [(ngModel)]="driver.number" name="number" (ionBlur)='onInputBlur($event, driver)'></ion-input>
               </ion-col>
               <ion-col ion-item col-3>
-                  {{ driver.driver }}
+                {{ driver.driver }}
               </ion-col>
               <ion-col ion-item col-6>
-                  <ion-input type="text" maxlength="3" [(ngModel)]="driver.time" name="time"></ion-input>
+                <ion-input type="text" maxlength="12" [(ngModel)]="driver.time" name="time" (ionBlur)='onInputBlur($event, driver)'></ion-input>
               </ion-col>
             </ion-row>
           </ion-grid>

@@ -22,19 +22,12 @@ export class TimeTrackerPage {
     Z: 'HH:MM:SS.MSX'
   };
 
-  driversData: Array<Object> = [
+  driversData: Array<Driver> = [
     {
-      number: 1,
-      driver: 'John Doe',
-      time: '02:32:45:762'
-    }, {
-      number: 2,
-      driver: 'James Rock',
-      time: '02:31:13:103'
-    }, {
-      number: 2,
-      driver: 'James Rock',
-      time: '02:31:13:103'
+      number: '',
+      driver: '',
+      time: '',
+      empty: true
     }
   ];
 
@@ -104,6 +97,30 @@ export class TimeTrackerPage {
     }
   }
 
+  onInputBlur(event: any, driver: Driver) {
+    const value = event.value;
+
+    if (value) {
+      // some value entered and now driver object is used
+      driver.empty = false;
+
+      // search if some empty object is still empty
+      const isEmpty = this.driversData.some((driver) => {
+        return driver.empty;
+      });
+
+      // add new empty object if all are used
+      if (!isEmpty) {
+        this.driversData.push({
+          number: '',
+          driver: '',
+          time: '',
+          empty: true
+        });
+      }
+    }
+  }
+
   showToast(message: string) {
     const toast = this.toastCtrl.create({
       message: message,
@@ -114,4 +131,12 @@ export class TimeTrackerPage {
     toast.present();
   }
 
+}
+
+
+interface Driver {
+  number: string;
+  driver: string;
+  time: string;
+  empty: boolean;
 }
