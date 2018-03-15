@@ -9,12 +9,10 @@ import { Serial } from '@ionic-native/serial';
 export class TimeTrackerPage {
 
   parameters: any;
-  eventID: string | number;
-  eventName: string;
-  resendIntensity: string | number;
   drivers: any;
   selectedPoint: any;
-  timeFieldFormats: any = {
+  rs232Received: string;
+  timeFieldFormats: object = {
     A: 'HH:MM',
     B: 'HH:MM:SS.MS',
     F: 'HH:MM:SS.M',
@@ -33,6 +31,10 @@ export class TimeTrackerPage {
       number: 2,
       driver: 'James Rock',
       time: '02:31:13:103'
+    }, {
+      number: 2,
+      driver: 'James Rock',
+      time: '02:31:13:103'
     }
   ];
 
@@ -44,16 +46,11 @@ export class TimeTrackerPage {
   ) {
     this.parameters = this.navParams.get('parameters');
     this.selectedPoint = this.navParams.get('point');
+    this.selectedPoint.timeFormat = this.timeFieldFormats[this.selectedPoint.Type];
     this.drivers = this.navParams.get('drivers');
-
-    // get all parameter's values
-    this.parameters.forEach((param) => {
-      if (param.Code === "EventID") this.eventID = param.Value;
-      if (param.Code === "EventName") this.eventName = param.Value;
-      if (param.Code === "ResendIntensity") this.resendIntensity = param.Value;
-    });
+    this.rs232Received = '';
   }
-
+  
   ionViewDidLoad() {
     // ..
   }
@@ -77,16 +74,34 @@ export class TimeTrackerPage {
         this.serial.registerReadCallback()
           .subscribe((data) => {
             // output incoming data
-            const charCodes = new Uint8Array(data);
-            const chars = String.fromCharCode.apply(null, charCodes);
-            this.showToast(chars);
-            console.log(data);
+            this.receive232Buffer(data);
           });
       });
     }).catch((error: any) => {
       this.showToast(error);
       console.log(error);
     });
+  }
+
+  receive232Buffer(data: any) {
+    const uint8buffer = new Uint8Array(data);
+    const charIterator = uint8buffer.entries();
+    let eNext;
+
+    while (true) {
+      eNext = charIterator.next();
+      if (eNext.done) {
+        break;
+      }
+
+      if (eNext.value[1] === 10) {
+        // Dati ir sanemti, jaieliek saraksta jauns rezultats. Pagaidam tikai izvads
+        this.showToast(this.rs232Received);
+        this.rs232Received = '';
+      } else {
+        this.rs232Received = this.rs232Received + String.fromCharCode(eNext.value[1]);
+      }
+    }
   }
 
   showToast(message: string) {

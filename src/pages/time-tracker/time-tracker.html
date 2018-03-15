@@ -27,42 +27,32 @@
           <ion-list-header>
             <ion-grid>
               <ion-row>
-                <ion-col col-2 text-center>
+                <ion-col col-3 text-center>
                   Car Nr.
                 </ion-col>
-                <ion-col col-5 text-center>
+                <ion-col col-3 text-center>
                   Driver
                 </ion-col>
-                <ion-col col-5 text-center>
+                <ion-col col-6 text-center>
                   Time
                 </ion-col>
               </ion-row>
             </ion-grid>
           </ion-list-header>
 
-          <ion-item *ngFor="let driver of driversData">
+          <ion-grid *ngFor="let driver of driversData">
             <ion-row>
-              <ion-col col-2 text-center>
-                <ion-input type="text" [(ngModel)]="driver.number" name="title"></ion-input>
+              <ion-col ion-item col-3>
+                  <ion-input type="text" maxlength="3" [(ngModel)]="driver.number" name="number"></ion-input>
               </ion-col>
-              <ion-col col-5 text-center>
-                {{ driver.driver }}
+              <ion-col ion-item col-3>
+                  {{ driver.driver }}
               </ion-col>
-              <ion-col col-5 text-center>
-                {{ driver.time }}
+              <ion-col ion-item col-6>
+                  <ion-input type="text" maxlength="3" [(ngModel)]="driver.time" name="time"></ion-input>
               </ion-col>
             </ion-row>
-
-            <!-- <ion-item>
-                <ion-label >Label</ion-label>
-                <ion-input type="text"  readonly="true"></ion-input>
-                <div class="buttons" item-right>
-                  <button ion-button >
-                    Go!
-                  </button>
-                </div>
-              </ion-item> -->
-          </ion-item>
+          </ion-grid>
         </ion-list>
       </ion-col>
     </ion-row>
