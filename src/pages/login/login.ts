@@ -41,6 +41,9 @@ export class LoginPage {
         } else {
           this.showToast('Access is denied!');
         }
+      }, (error) => {
+        this.showToast('Service error, please try again later or contact your admin!');
+        console.log('Service error: ', error);
       });
   }
 

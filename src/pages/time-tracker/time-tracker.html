@@ -11,7 +11,7 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content no-padding>
 
   <ion-grid>
     <ion-row justify-content-center>
@@ -22,39 +22,38 @@
     </ion-row>
 
     <ion-row justify-content-center>
-      <ion-card *ngFor="let driver of driversData" class="driver-card">
-        <ion-card-header>
+      <ion-card *ngFor="let driver of driversData; let i = index" class="driver-card">
+        <ion-card-header no-padding>
           <ion-row>
-            <ion-col ion-item col-9 text-left>
-              Driver:
+            <ion-col ion-item col-3 text-center no-padding>
+              <button ion-button icon-only clear="true" color="danger" large="true" (click)="removeItem(driver, i)">
+                <ion-icon name="remove-circle"></ion-icon>
+              </button>
+            </ion-col>
+            <ion-col ion-item col-6 text-center no-padding>
               <span class="driver-card__name-label">{{ driver.name }}</span>
             </ion-col>
-            <ion-col ion-item col-3 text-center>
-              <ion-checkbox [(ngModel)]="driver.remove"></ion-checkbox>
+            <ion-col ion-item col-3 text-center no-padding>
+              <button ion-button icon-only clear="true" color="secondary" large="true" (click)="acceptItem(driver, i)">
+                <ion-icon name="checkmark-circle"></ion-icon>
+              </button>
             </ion-col>
           </ion-row>
         </ion-card-header>
-        <ion-card-content>
+        <ion-card-content no-padding padding-horizontal>
           <ion-row>
             <ion-col ion-item col-4 text-center>
               <ion-label stacked>Car Nr.</ion-label>
-              <ion-input id="carNumber" type="text" maxlength="3" [(ngModel)]="driver.number" name="number" (ionBlur)='mapDriversByCarNumber($event, driver)'
+              <ion-input id="carNumber" type="number" maxlength="3" [(ngModel)]="driver.number" name="number" (ionBlur)='mapDriversByCarNumber($event, driver)'
                 class="driver-card__number-input"></ion-input>
             </ion-col>
             <ion-col ion-item col-8 text-center>
               <ion-label stacked>Time</ion-label>
-              <ion-input type="text" maxlength="12" [(ngModel)]="driver.time" name="time" (ionBlur)='onInputBlur($event, driver)' 
-                class="driver-card__time-input"></ion-input>
+              <ion-input type="number" maxlength="12" [(ngModel)]="driver.time" name="time" (ionBlur)='onInputBlur($event, driver)' class="driver-card__time-input"></ion-input>
             </ion-col>
           </ion-row>
         </ion-card-content>
       </ion-card>
-    </ion-row>
-
-    <ion-row justify-content-center>
-      <ion-col col-sm-12 col-md-6 col-lg-3 col-xl-2>
-        <button ion-button outline block (click)="sendData()">Send</button>
-      </ion-col>
     </ion-row>
   </ion-grid>
 

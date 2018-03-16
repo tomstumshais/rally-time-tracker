@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, ToastController } from 'ionic-angular';
 import { Serial } from '@ionic-native/serial';
 
+import { DataServiceProvider } from "../../providers/data-service/data-service";
+
 @Component({
   selector: 'page-time-tracker',
   templateUrl: 'time-tracker.html',
@@ -13,7 +15,7 @@ export class TimeTrackerPage {
   selectedPoint: any;
   eventID: string | number;
   eventName: string;
-  resendIntensity: string | number;
+  resendIntensity: number;
   rs232Received: string;
   timeFieldFormats: object = {
     A: 'HH:MM',
@@ -24,22 +26,23 @@ export class TimeTrackerPage {
     T: 'HH:MM',
     Z: 'HH:MM:SS.MSX'
   };
-
   driversData: Array<Driver> = [
     {
       number: '',
       name: '', 
       time: '',
-      empty: true,
-      remove: false
+      empty: true
     }
   ];
+  readyToSendData: Array<object> = [];
+  intervalTask: number;
 
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
     private toastCtrl: ToastController,
-    private serial: Serial
+    private serial: Serial,
+    private dataService: DataServiceProvider
   ) {
     this.parameters = this.navParams.get('parameters');
     this.selectedPoint = this.navParams.get('point');
@@ -51,16 +54,119 @@ export class TimeTrackerPage {
     this.parameters.forEach((param) => {
       if (param.Code === "EventID") this.eventID = param.Value;
       if (param.Code === "EventName") this.eventName = param.Value;
-      if (param.Code === "ResendIntensity") this.resendIntensity = param.Value;
+      // ResendIntensity always comes in seconds, need to convert to milliseconts
+      if (param.Code === "ResendIntensity") this.resendIntensity = (param.Value * 1000);
     });
   }
   
   ionViewDidLoad() {
-    // ..
+    console.log(this.intervalTask);
+    // TODO: set interval only once
+    this.intervalTask = setInterval(() => {
+      this.sendData();
+    }, this.resendIntensity);
   }
 
+  // handle input blur event and add new empty object
+  onInputBlur(event: any, driver: Driver) {
+    const value = event.value;
+
+    if (value) {
+      // some value entered and now driver object is used
+      driver.empty = false;
+
+      const isEmpty = this.driversData.some((driver) => {
+        return driver.empty;
+      });
+
+      // add new empty object if all are used
+      if (!isEmpty) {
+        this.driversData.push({
+          number: '',
+          name: '',
+          time: '',
+          empty: true
+        });
+      }
+    }
+  }
+
+  mapDriversByCarNumber(event: any, driver: Driver) {
+    const value = event.value;
+
+    const addedDriver = this.drivers.find((d) => {
+      return d.No === value;
+    });
+
+    if (addedDriver) {
+      driver.name = addedDriver.Name;
+    } else {
+      driver.name = '';
+    }
+
+    // check if need to add empty object
+    this.onInputBlur(event, driver);
+  }
+
+  removeItem(driver: Driver, i: number) {
+    if(this.driversData.length === 1) {
+      this.showToast("Can't delete last item!");
+    } else {
+      this.driversData.splice(i, 1);
+    }
+  }
+
+  acceptItem(driver: Driver, i: number) {
+    if (!driver.empty) {
+      // add to send array
+      this.readyToSendData.push({
+        PointsID: this.selectedPoint.ID,
+        No: driver.number,
+        Result: driver.time
+      });
+
+      // add new empty object if last one is added
+      if (this.driversData.length === 1) {
+        this.driversData.push({
+          number: '',
+          name: '',
+          time: '',
+          empty: true
+        });
+      }
+
+      // remove added item
+      this.driversData.splice(i, 1);
+    } else {
+      this.showToast("Can't send empty item!");
+    }
+  }
+
+  // send data to back-end
   sendData() {
-    // test Serial port connection
+    if (this.readyToSendData.length) {
+      /*{
+  "Header": {
+    "EventID": "50"
+  },
+  "Data": [
+    {"PointsID": "21", "No": "61", "Result": "14.40"},
+    {"PointsID": "21", "No": "62", "Result": "14.41"}
+  ]
+}*/
+      const data = {
+        Header: {
+          EventID: this.eventID
+        },
+        Data: this.readyToSendData
+      };
+      // TODO: handle success and error cases, clear array
+      this.dataService.sendData(data).subscribe();
+    }
+  }
+
+  // open and listen to serial port
+  listenToRS232Connection() {
     this.serial.requestPermission().then(() => {
       this.showToast('Request Permission done');
       console.log('Request Permission done');
@@ -87,6 +193,7 @@ export class TimeTrackerPage {
     });
   }
 
+  // handle RS232 data
   receive232Buffer(data: any) {
     const uint8buffer = new Uint8Array(data);
     const charIterator = uint8buffer.entries();
@@ -108,46 +215,6 @@ export class TimeTrackerPage {
     }
   }
 
-  onInputBlur(event: any, driver: Driver) {
-    const value = event.value;
-
-    if (value) {
-      // some value entered and now driver object is used
-      driver.empty = false;
-
-      // search if some empty object is still empty
-      const isEmpty = this.driversData.some((driver) => {
-        return driver.empty;
-      });
-
-      // add new empty object if all are used
-      if (!isEmpty) {
-        this.driversData.push({
-          number: '',
-          name: '',
-          time: '',
-          empty: true,
-          remove: false
-        });
-      }
-    }
-  }
-
-  mapDriversByCarNumber(event: any, driver: Driver) {
-    const value = event.value;
-
-    const addedDriver = this.drivers.find((d) => {
-      return d.No === value;
-    });
-
-    if (addedDriver) {
-      driver.name = addedDriver.Name;
-    }
-
-    // check if need to add empty object
-    this.onInputBlur(event, driver);
-  }
-
   showToast(message: string) {
     const toast = this.toastCtrl.create({
       message: message,
@@ -166,5 +233,4 @@ interface Driver {
   name: string;
   time: string;
   empty: boolean;
-  remove: boolean;
 }
