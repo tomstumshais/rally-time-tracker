@@ -28,9 +28,10 @@ export class TimeTrackerPage {
   driversData: Array<Driver> = [
     {
       number: '',
-      driver: '',
+      name: '', 
       time: '',
-      empty: true
+      empty: true,
+      remove: false
     }
   ];
 
@@ -123,12 +124,28 @@ export class TimeTrackerPage {
       if (!isEmpty) {
         this.driversData.push({
           number: '',
-          driver: '',
+          name: '',
           time: '',
-          empty: true
+          empty: true,
+          remove: false
         });
       }
     }
+  }
+
+  mapDriversByCarNumber(event: any, driver: Driver) {
+    const value = event.value;
+
+    const addedDriver = this.drivers.find((d) => {
+      return d.No === value;
+    });
+
+    if (addedDriver) {
+      driver.name = addedDriver.Name;
+    }
+
+    // check if need to add empty object
+    this.onInputBlur(event, driver);
   }
 
   showToast(message: string) {
@@ -146,7 +163,8 @@ export class TimeTrackerPage {
 
 interface Driver {
   number: string;
-  driver: string;
+  name: string;
   time: string;
   empty: boolean;
+  remove: boolean;
 }

@@ -3,10 +3,9 @@ page-time-tracker {
     width: 20%;
   }
 
-//   ion-col > div.item-inner {
-//     border-bottom: none !important;
-//     -webkit-box-shadow: none !important;
-//     -moz-box-shadow: none !important;
-//     box-shadow: none !important;
-//   }
+  .driver-card__number-input,
+  .driver-card__time-input,
+  .driver-card__name-label {
+    font-size: 2rem !important;
+  }
 }
