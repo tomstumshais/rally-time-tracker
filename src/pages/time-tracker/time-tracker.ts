@@ -11,6 +11,9 @@ export class TimeTrackerPage {
   parameters: any;
   drivers: any;
   selectedPoint: any;
+  eventID: string | number;
+  eventName: string;
+  resendIntensity: string | number;
   rs232Received: string;
   timeFieldFormats: object = {
     A: 'HH:MM',
@@ -42,6 +45,13 @@ export class TimeTrackerPage {
     this.selectedPoint.timeFormat = this.timeFieldFormats[this.selectedPoint.Type];
     this.drivers = this.navParams.get('drivers');
     this.rs232Received = '';
+
+    // get all parameter's values
+    this.parameters.forEach((param) => {
+      if (param.Code === "EventID") this.eventID = param.Value;
+      if (param.Code === "EventName") this.eventName = param.Value;
+      if (param.Code === "ResendIntensity") this.resendIntensity = param.Value;
+    });
   }
   
   ionViewDidLoad() {
