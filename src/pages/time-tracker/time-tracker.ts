@@ -35,7 +35,6 @@ export class TimeTrackerPage {
     }
   ];
   readyToSendData: Array<object> = [];
-  intervalTask: number;
 
   constructor(
     public navCtrl: NavController, 
@@ -60,11 +59,12 @@ export class TimeTrackerPage {
   }
   
   ionViewDidLoad() {
-    console.log(this.intervalTask);
-    // TODO: set interval only once
-    this.intervalTask = setInterval(() => {
-      this.sendData();
-    }, this.resendIntensity);
+    // call constantly send data method after configured intensity
+    if (this.dataService.intervalTask === undefined) {
+      this.dataService.intervalTask = setInterval(() => {
+        this.sendData();
+      }, this.resendIntensity);
+    }
   }
 
   // handle input blur event and add new empty object

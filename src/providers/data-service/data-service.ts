@@ -3,7 +3,9 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class DataServiceProvider {
-  url: string = 'https://lrc.lv/zxc/apptest';
+  private url: string = 'https://lrc.lv/zxc/apptest';
+  // store setInterval ID for send data interval
+  public intervalTask: number;
 
   constructor(
     public http: HttpClient
@@ -23,7 +25,7 @@ export class DataServiceProvider {
     return this.http.post(this.url + '/setData.php', data);
   }
 
-  post(endpoint: string, body: any, reqOpts?: any) {
-    return this.http.post(this.url + '/' + endpoint, body, reqOpts);
-  }
+  // post(endpoint: string, body: any, reqOpts?: any) {
+  //   return this.http.post(this.url + '/' + endpoint, body, reqOpts);
+  // }
 }
