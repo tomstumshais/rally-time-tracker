@@ -60,6 +60,8 @@ export class TimeTrackerPage {
   ionViewDidLoad() {
     // call constantly send data method after configured intensity
     if (this.dataService.intervalTask === undefined) {
+      // open connection with RS232
+      this.listenToRS232Connection();
       this.dataService.intervalTask = setInterval(() => {
         this.sendData();
       }, this.resendIntensity);
