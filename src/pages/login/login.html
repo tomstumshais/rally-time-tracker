@@ -13,7 +13,7 @@
       <ion-col col-12 col-sm-8 col-md-5 col-lg-4 col-xl-3 text-center>
         <ion-item>
           <ion-label stacked>Access Code:</ion-label>
-          <ion-input type="password" maxlength="10" [(ngModel)]="accessCode"></ion-input>
+          <ion-input type="number" [(ngModel)]="accessCode"></ion-input>
         </ion-item>
         <button ion-button outline block (click)="checkAccessCode()">Go</button>
       </ion-col>

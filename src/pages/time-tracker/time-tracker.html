@@ -5,7 +5,7 @@
   </ion-navbar>
 
   <ion-toolbar color="primary">
-    <ion-title text-center>{{ eventName }}</ion-title>
+    <ion-title text-center>{{ selectedPoint.Name }}</ion-title>
   </ion-toolbar>
 
 </ion-header>
@@ -15,14 +15,7 @@
 
   <ion-grid>
     <ion-row justify-content-center>
-      <ion-col col-sm-12 col-md-6 col-lg-3 col-xl-2>
-        <h3>
-          <span>Checkpoint: </span>{{ selectedPoint.Name }}</h3>
-      </ion-col>
-    </ion-row>
-
-    <ion-row justify-content-center>
-      <ion-card *ngFor="let driver of driversData; let i = index" class="driver-card">
+      <ion-card *ngFor="let driver of dataService.driversData; let i = index" class="driver-card">
         <ion-card-header no-padding>
           <ion-row>
             <ion-col ion-item col-3 text-center no-padding>
@@ -44,7 +37,7 @@
           <ion-row>
             <ion-col ion-item col-4 text-center>
               <ion-label stacked>Car Nr.</ion-label>
-              <ion-input id="carNumber" type="number" maxlength="3" [(ngModel)]="driver.number" name="number" (ionBlur)='mapDriversByCarNumber($event, driver)'
+              <ion-input id="carNumber" type="number" maxlength="3" [(ngModel)]="driver.number" name="number" (ionChange)='mapDriversByCarNumber($event, driver)'
                 class="driver-card__number-input"></ion-input>
             </ion-col>
             <ion-col ion-item col-8 text-center>
@@ -58,3 +51,10 @@
   </ion-grid>
 
 </ion-content>
+
+
+<ion-footer>
+
+  <button ion-button block outline (click)="addItem()">Add New Driver</button>
+
+</ion-footer>

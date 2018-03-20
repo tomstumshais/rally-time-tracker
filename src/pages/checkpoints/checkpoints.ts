@@ -13,6 +13,7 @@ export class CheckpointsPage {
   drivers: any;
   points: any;
   selectedPointID: string = '';
+  eventName: string = '';
 
   constructor(
     public navCtrl: NavController, 
@@ -22,6 +23,10 @@ export class CheckpointsPage {
     this.parameters = this.navParams.get('parameters');
     this.points = this.navParams.get('points');
     this.drivers = this.navParams.get('drivers');
+
+    this.parameters.forEach((param) => {
+      if (param.Code === "EventName") this.eventName = param.Value;
+    });
   }
 
   ionViewDidLoad() {

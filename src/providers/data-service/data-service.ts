@@ -8,6 +8,9 @@ export class DataServiceProvider {
   private url: string = 'https://lrc.lv/zxc/apptest';
   // store setInterval ID for send data interval
   public intervalTask: number;
+  // store driver cards in UI
+  public driversData: Array<Driver> = [];
+  // store driver data for sending to back-end
   public readyToSendData: Array<object> = [];
 
   constructor(
@@ -48,4 +51,12 @@ export class DataServiceProvider {
     
 		return formBody.join('&');
 	}
+}
+
+
+export interface Driver {
+  number: string;
+  name: string;
+  time: string;
+  empty: boolean;
 }

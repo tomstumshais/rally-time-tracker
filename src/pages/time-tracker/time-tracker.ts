@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, ToastController } from 'ionic-angular';
 import { Serial } from '@ionic-native/serial';
 
-import { DataServiceProvider } from "../../providers/data-service/data-service";
+import { DataServiceProvider, Driver } from "../../providers/data-service/data-service";
 
 @Component({
   selector: 'page-time-tracker',
@@ -14,7 +14,6 @@ export class TimeTrackerPage {
   drivers: any;
   selectedPoint: any;
   eventID: string | number;
-  eventName: string;
   resendIntensity: number;
   rs232Received: string;
   timeFieldFormats: object = {
@@ -26,14 +25,6 @@ export class TimeTrackerPage {
     T: 'HH:MM',
     Z: 'HH:MM:SS.MSX'
   };
-  driversData: Array<Driver> = [
-    {
-      number: '',
-      name: '', 
-      time: '',
-      empty: true
-    }
-  ];
 
   constructor(
     public navCtrl: NavController, 
@@ -46,12 +37,12 @@ export class TimeTrackerPage {
     this.selectedPoint = this.navParams.get('point');
     this.selectedPoint.timeFormat = this.timeFieldFormats[this.selectedPoint.Type];
     this.drivers = this.navParams.get('drivers');
+    this.dataService.driversData = [];
     this.rs232Received = '';
 
-    // get all parameter's values
+    // get parameter's values
     this.parameters.forEach((param) => {
       if (param.Code === "EventID") this.eventID = param.Value;
-      if (param.Code === "EventName") this.eventName = param.Value;
       // ResendIntensity always comes in seconds, need to convert to milliseconts
       if (param.Code === "ResendIntensity") this.resendIntensity = (param.Value * 1000);
     });
@@ -68,7 +59,7 @@ export class TimeTrackerPage {
     }
   }
 
-  // handle input blur event and add new empty object
+  // handle input blur event and set empty flag to false
   onInputBlur(event: any, driver: Driver) {
     const value = event.value;
 
@@ -76,19 +67,19 @@ export class TimeTrackerPage {
       // some value entered and now driver object is used
       driver.empty = false;
 
-      const isEmpty = this.driversData.some((driver) => {
-        return driver.empty;
-      });
+      // const isEmpty = this.dataService.driversData.some((driver) => {
+      //   return driver.empty;
+      // });
 
       // add new empty object if all are used
-      if (!isEmpty) {
-        this.driversData.push({
-          number: '',
-          name: '',
-          time: '',
-          empty: true
-        });
-      }
+      // if (!isEmpty) {
+      //   this.dataService.driversData.push({
+      //     number: '',
+      //     name: '',
+      //     time: '',
+      //     empty: true
+      //   });
+      // }
     }
   }
 
@@ -105,16 +96,25 @@ export class TimeTrackerPage {
       driver.name = '';
     }
 
-    // check if need to add empty object
+    // set empty flag
     this.onInputBlur(event, driver);
   }
 
+  addItem() {
+    this.dataService.driversData.push({
+      number: '',
+      name: '',
+      time: '',
+      empty: true
+    });
+  }
+
   removeItem(driver: Driver, i: number) {
-    if(this.driversData.length === 1) {
-      this.showToast("Can't delete last item!");
-    } else {
-      this.driversData.splice(i, 1);
-    }
+    // if(this.dataService.driversData.length === 1) {
+    //   this.showToast("Can't delete last item!");
+    // } else {
+      this.dataService.driversData.splice(i, 1);
+    // }
   }
 
   acceptItem(driver: Driver, i: number) {
@@ -127,17 +127,17 @@ export class TimeTrackerPage {
       });
 
       // add new empty object if last one is added
-      if (this.driversData.length === 1) {
-        this.driversData.push({
-          number: '',
-          name: '',
-          time: '',
-          empty: true
-        });
-      }
+      // if (this.dataService.driversData.length === 1) {
+      //   this.dataService.driversData.push({
+      //     number: '',
+      //     name: '',
+      //     time: '',
+      //     empty: true
+      //   });
+      // }
 
       // remove added item
-      this.driversData.splice(i, 1);
+      this.dataService.driversData.splice(i, 1);
     } else {
       this.showToast("Can't send empty item!");
     }
@@ -226,7 +226,7 @@ export class TimeTrackerPage {
           this.showToast(this.rs232Received);
 
           // push received data from RS232 to UI
-          this.driversData.push({
+          this.dataService.driversData.push({
             number: '',
             name: '',
             time: this.rs232Received,
@@ -250,12 +250,4 @@ export class TimeTrackerPage {
     toast.present();
   }
 
-}
-
-
-interface Driver {
-  number: string;
-  name: string;
-  time: string;
-  empty: boolean;
 }
