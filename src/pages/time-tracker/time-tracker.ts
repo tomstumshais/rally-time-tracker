@@ -34,7 +34,6 @@ export class TimeTrackerPage {
       empty: true
     }
   ];
-  readyToSendData: Array<object> = [];
 
   constructor(
     public navCtrl: NavController, 
@@ -119,7 +118,7 @@ export class TimeTrackerPage {
   acceptItem(driver: Driver, i: number) {
     if (!driver.empty) {
       // add to send array
-      this.readyToSendData.push({
+      this.dataService.readyToSendData.push({
         PointsID: this.selectedPoint.ID,
         No: driver.number,
         Result: driver.time
@@ -144,32 +143,30 @@ export class TimeTrackerPage {
 
   // send data to back-end
   sendData() {
-    if (this.readyToSendData.length) {
-      /*{
-  "Header": {
-    "EventID": "50"
-  },
-  "Data": [
-    {"PointsID": "21", "No": "61", "Result": "14.40"},
-    {"PointsID": "21", "No": "62", "Result": "14.41"}
-  ]
-}*/
+    if (this.dataService.readyToSendData.length) {
       const data = {
         Header: {
           EventID: this.eventID
         },
-        Data: this.readyToSendData
+        Data: this.dataService.readyToSendData
       };
-      // TODO: handle success and error cases, clear array
-      this.dataService.sendData(data).subscribe();
+
+      this.dataService.sendData(JSON.stringify(data), (this.resendIntensity - 500))
+        .subscribe((response: any) => {
+          // need to clear array when data is send
+          this.dataService.readyToSendData = [];
+        }, (error: any) => {
+          // this.showToast('Service error, please try again later or contact your admin!');
+          console.log('Service error: ', error);
+        });
     }
   }
 
   // open and listen to serial port
   listenToRS232Connection() {
     this.serial.requestPermission().then(() => {
-      this.showToast('Request Permission done');
-      console.log('Request Permission done');
+      // this.showToast('Request Permission done');
+      console.log('Request Permission done!');
       this.serial.open({
         baudRate: 9600,
         dataBits: 8,
@@ -179,17 +176,21 @@ export class TimeTrackerPage {
         rts: false,
         sleepOnPause: false
       }).then(() => {
-        this.showToast('Serial connection opened');
-        console.log('Serial connection opened');
+        // this.showToast('Serial connection opened');
+        console.log('Serial connection opened!');
         this.serial.registerReadCallback()
           .subscribe((data) => {
             // output incoming data
             this.receive232Buffer(data);
+          }, (error) => {
+            console.log('Serial receiver error!');
           });
+      }).catch((error: any) => {
+        console.log('Serial connection error!');
       });
     }).catch((error: any) => {
-      this.showToast(error);
-      console.log(error);
+      // this.showToast(error);
+      console.log('Permission rejected!', error);
     });
   }
 
@@ -205,9 +206,31 @@ export class TimeTrackerPage {
         break;
       }
 
-      if (eNext.value[1] === 10) {
-        // Dati ir sanemti, jaieliek saraksta jauns rezultats. Pagaidam tikai izvads
-        this.showToast(this.rs232Received);
+      if (eNext.value[1] === 13) {
+        // Dati ir sanemti, jaieliek saraksta jauns rezultats
+        // Laika izparseshana no sanjemtiem datiem
+        
+        const identification = this.rs232Received.substr(0, 1);
+        // const competitornumber = this.rs232Received.substr(7,4); // not use
+        // const inputchannel     = this.rs232Received.substr(12,2); // not use
+        var inputTime = this.rs232Received.substr(15, 15);
+        if (inputTime.substr(0,2) == '  ') {
+          inputTime = new Date().getHours() + ':' + inputTime.substr(3);
+        }
+        inputTime = inputTime.replace(/:/g, '.');
+        
+        if (identification === 'T') {
+          this.rs232Received = inputTime.substr(0,12);
+          this.showToast(this.rs232Received);
+
+          // push received data from RS232 to UI
+          this.driversData.push({
+            number: '',
+            name: '',
+            time: this.rs232Received,
+            empty: false
+          });
+        }
         this.rs232Received = '';
       } else {
         this.rs232Received = this.rs232Received + String.fromCharCode(eNext.value[1]);

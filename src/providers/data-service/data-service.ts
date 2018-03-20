@@ -1,11 +1,14 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
+import 'rxjs/add/operator/timeout';
 
 @Injectable()
 export class DataServiceProvider {
   private url: string = 'https://lrc.lv/zxc/apptest';
   // store setInterval ID for send data interval
   public intervalTask: number;
+  public readyToSendData: Array<object> = [];
 
   constructor(
     public http: HttpClient
@@ -21,11 +24,28 @@ export class DataServiceProvider {
     }
   }
   
-  sendData(data: any) {
-    return this.http.post(this.url + '/setData.php', data);
+  sendData(data: any, timeout: number) {
+    return this.http.post(
+      this.url + '/setData.php', 
+      this.getFormUrlEncoded({ data: data }), 
+      { 
+        headers: new HttpHeaders({ // necessary header to pass Form Data
+          'Content-Type':  'application/x-www-form-urlencoded'
+        }), 
+        responseType: 'text' // service return text, not a JSON
+      }
+    ).timeout(timeout);
   }
 
-  // post(endpoint: string, body: any, reqOpts?: any) {
-  //   return this.http.post(this.url + '/' + endpoint, body, reqOpts);
-  // }
+  // encode data to Form Data
+  getFormUrlEncoded(toConvert) {
+		const formBody = [];
+		for (const property in toConvert) {
+			const encodedKey = encodeURIComponent(property);
+			const encodedValue = encodeURIComponent(toConvert[property]);
+			formBody.push(encodedKey + '=' + encodedValue);
+    }
+    
+		return formBody.join('&');
+	}
 }
