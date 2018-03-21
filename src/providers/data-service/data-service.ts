@@ -11,7 +11,7 @@ export class DataServiceProvider {
   // store driver cards in UI
   public driversData: Array<Driver> = [];
   // store driver data for sending to back-end
-  public readyToSendData: Array<object> = [];
+  public readyToSendData: Array<any> = [];
 
   constructor(
     public http: HttpClient

@@ -66,20 +66,6 @@ export class TimeTrackerPage {
     if (value) {
       // some value entered and now driver object is used
       driver.empty = false;
-
-      // const isEmpty = this.dataService.driversData.some((driver) => {
-      //   return driver.empty;
-      // });
-
-      // add new empty object if all are used
-      // if (!isEmpty) {
-      //   this.dataService.driversData.push({
-      //     number: '',
-      //     name: '',
-      //     time: '',
-      //     empty: true
-      //   });
-      // }
     }
   }
 
@@ -109,12 +95,8 @@ export class TimeTrackerPage {
     });
   }
 
-  removeItem(driver: Driver, i: number) {
-    // if(this.dataService.driversData.length === 1) {
-    //   this.showToast("Can't delete last item!");
-    // } else {
-      this.dataService.driversData.splice(i, 1);
-    // }
+  removeItem(i: number) {
+    this.dataService.driversData.splice(i, 1);
   }
 
   acceptItem(driver: Driver, i: number) {
@@ -126,16 +108,6 @@ export class TimeTrackerPage {
         Result: driver.time
       });
 
-      // add new empty object if last one is added
-      // if (this.dataService.driversData.length === 1) {
-      //   this.dataService.driversData.push({
-      //     number: '',
-      //     name: '',
-      //     time: '',
-      //     empty: true
-      //   });
-      // }
-
       // remove added item
       this.dataService.driversData.splice(i, 1);
     } else {
@@ -146,6 +118,9 @@ export class TimeTrackerPage {
   // send data to back-end
   sendData() {
     if (this.dataService.readyToSendData.length) {
+      // add sending flag to know which items were sent when clear array
+      this.dataService.readyToSendData.forEach(data => data.sending = true);
+      // create data object for request
       const data = {
         Header: {
           EventID: this.eventID
@@ -155,8 +130,8 @@ export class TimeTrackerPage {
 
       this.dataService.sendData(JSON.stringify(data), (this.resendIntensity - 500))
         .subscribe((response: any) => {
-          // need to clear array when data is send
-          this.dataService.readyToSendData = [];
+          // need to clear sent items from array by "sending" flag
+          this.dataService.readyToSendData = this.dataService.readyToSendData.filter(data => !data.sending);
         }, (error: any) => {
           // this.showToast('Service error, please try again later or contact your admin!');
           console.log('Service error: ', error);
@@ -225,6 +200,7 @@ export class TimeTrackerPage {
           this.rs232Received = inputTime.substr(0,12);
           this.showToast(this.rs232Received);
 
+          // TODO: need to cut string for correct format
           // push received data from RS232 to UI
           this.dataService.driversData.push({
             number: '',

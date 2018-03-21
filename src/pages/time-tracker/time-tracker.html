@@ -19,7 +19,7 @@
         <ion-card-header no-padding>
           <ion-row>
             <ion-col ion-item col-3 text-center no-padding>
-              <button ion-button icon-only clear="true" color="danger" large="true" (click)="removeItem(driver, i)">
+              <button ion-button icon-only clear="true" color="danger" large="true" (click)="removeItem(i)">
                 <ion-icon name="remove-circle"></ion-icon>
               </button>
             </ion-col>
@@ -33,6 +33,7 @@
             </ion-col>
           </ion-row>
         </ion-card-header>
+
         <ion-card-content no-padding padding-horizontal>
           <ion-row>
             <ion-col ion-item col-4 text-center>
