@@ -115,6 +115,41 @@ export class TimeTrackerPage {
     }
   }
 
+  validateItem(driver: Driver): boolean {
+    // number is from 1 - 999
+    if (parseInt(driver.number) > 999 || parseInt(driver.number) < 1) return false;
+
+    // time with correct length
+    const timeLength = driver.time.length;
+    if (timeLength !== this.selectedPoint.timeFormat.length) return false;
+
+    // correct hours
+    const hours = parseInt(driver.time.substring(0, 2));
+    if (hours > 23 || hours < 0) return false;
+    
+    // correct minutes
+    const minutes = parseInt(driver.time.substring(3, 5));
+    if (minutes > 59 || minutes < 0) return false;
+    
+    // for time format there always will be at least hours and minutes
+    // need to pre-check if exists seconds and milliseconds
+    // correct seconds
+    if (timeLength >= 8) {
+      const seconds = parseInt(driver.time.substring(6, 8));
+      if (seconds > 59 || seconds < 0) return false;
+    }
+
+    // correct milliseconds
+    if (timeLength >= 9) {
+      const milliseconds = parseInt(driver.time.substring(9, timeLength));
+      if (milliseconds > 999 || milliseconds < 0) return false;
+    }
+
+    // TODO: check if seperators are not a numbers
+
+    return true;
+  }
+
   // send data to back-end
   sendData() {
     if (this.dataService.readyToSendData.length) {
@@ -200,7 +235,8 @@ export class TimeTrackerPage {
           this.rs232Received = inputTime.substr(0,12);
           this.showToast(this.rs232Received);
 
-          // TODO: need to cut string for correct format
+          // cut string for correct format length
+          this.rs232Received = this.rs232Received.substring(0, this.selectedPoint.timeFormat.length);
           // push received data from RS232 to UI
           this.dataService.driversData.push({
             number: '',
