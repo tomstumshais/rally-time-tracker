@@ -29,7 +29,6 @@ export class LoginPage {
           });
 
           if (isAllowed) {
-            console.log(`Access Code: ${this.accessCode}`);
             this.navCtrl.setRoot(CheckpointsPage, {
               parameters: data.Parameters,
               points: data.Points,
