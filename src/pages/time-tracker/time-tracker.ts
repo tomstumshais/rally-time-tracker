@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef  } from '@angular/core';
 import { NavController, NavParams, ToastController } from 'ionic-angular';
 import { Serial } from '@ionic-native/serial';
 
@@ -32,6 +32,7 @@ export class TimeTrackerPage {
     public navCtrl: NavController, 
     public navParams: NavParams,
     private toastCtrl: ToastController,
+    private cdr: ChangeDetectorRef,
     private serial: Serial,
     private dataService: DataServiceProvider
   ) {
@@ -266,6 +267,10 @@ export class TimeTrackerPage {
             name: '',
             time: this.rs232Received
           });
+          // need to call ChangeDetectorRef to update Angular scope
+          // because subscriptions are outside the Angular scope 
+          // and when an update arrives change-detection is not run
+          this.cdr.detectChanges();
 
           setTimeout(() => {
             // TODO: fix, set input always for first item
