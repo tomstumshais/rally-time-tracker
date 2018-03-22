@@ -74,13 +74,19 @@ export class TimeTrackerPage {
     } else {
       driver.name = '';
     }
+
+    // for RS232 port:
+    // need to call ChangeDetectorRef to update Angular scope
+    // because subscriptions to RS232 port are outside of the Angular scope 
+    // and when an update arrives change-detection is triggered or delayed
+    this.cdr.detectChanges();
   }
 
   addItem(time: string = '') {
     this.dataService.driversData.push({
       number: '',
       name: '',
-      time: ''
+      time: time
     });
 
     // for RS232 port:
