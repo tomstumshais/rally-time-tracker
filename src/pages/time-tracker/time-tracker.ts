@@ -74,12 +74,6 @@ export class TimeTrackerPage {
     } else {
       driver.name = '';
     }
-
-    // for RS232 port:
-    // need to call ChangeDetectorRef to update Angular scope
-    // because subscriptions to RS232 port are outside of the Angular scope 
-    // and when an update arrives change-detection is triggered or delayed
-    this.cdr.detectChanges();
   }
 
   addItem(time: string = '') {
@@ -112,15 +106,15 @@ export class TimeTrackerPage {
 
   acceptItem(driver: Driver, i: number) {
     if (this.validateItem(driver)) {
-      // add to send array
+      // add item to array which is used to send data to back-end
       this.dataService.readyToSendData.push({
         PointsID: this.selectedPoint.ID,
         No: driver.number,
         Result: driver.time
       });
 
-      // remove added item
-      this.dataService.driversData.splice(i, 1);
+      // remove item which is accepted to sending it to back-end
+      this.removeItem(i);
     } else {
       this.showToast("Not valid car number and/or time, please check it!");
     }
