@@ -113,36 +113,39 @@ export class TimeTrackerPage {
     driver.number = driver.number.trim();
     driver.time = driver.time.trim();
     // number is from 1 - 999
-    const driverNumber = parseInt(driver.number);
-    if (driverNumber > 999 || driverNumber < 1 || isNaN(driverNumber)) return false;
+    const driverNumberString = driver.number;
+    const driverNumber = parseInt(driverNumberString);
+    if (driverNumber > 999 || driverNumber < 1 || isNaN(driverNumber) || !driverNumberString.match(/^\d+$/)) return false;
 
     // time with correct length
     const timeLength = driver.time.length;
     if (timeLength !== this.selectedPoint.timeFormat.length) return false;
 
     // correct hours
-    const hours = parseInt(driver.time.substring(0, 2));
-    if (hours > 23 || hours < 0) return false;
+    const hoursString = driver.time.substring(0, 2);
+    const hours = parseInt(hoursString);
+    if (hours > 23 || hours < 0 || !hoursString.match(/^\d+$/)) return false;
     
     // correct minutes
-    const minutes = parseInt(driver.time.substring(3, 5));
-    if (minutes > 59 || minutes < 0) return false;
+    const minutesString = driver.time.substring(3, 5);
+    const minutes = parseInt(minutesString);
+    if (minutes > 59 || minutes < 0 || !minutesString.match(/^\d+$/)) return false;
     
     // for time format there always will be at least hours and minutes
     // need to pre-check if exists seconds and milliseconds
     // correct seconds
     if (timeLength >= 8) {
-      const seconds = parseInt(driver.time.substring(6, 8));
-      if (seconds > 59 || seconds < 0) return false;
+      const secondsString = driver.time.substring(6, 8);
+      const seconds = parseInt(secondsString);
+      if (seconds > 59 || seconds < 0 || !secondsString.match(/^\d+$/)) return false;
     }
 
     // correct milliseconds
     if (timeLength >= 9) {
-      const milliseconds = parseInt(driver.time.substring(9, timeLength));
-      if (milliseconds > 999 || milliseconds < 0) return false;
+      const millisecondsString = driver.time.substring(9, timeLength);
+      const milliseconds = parseInt(millisecondsString);
+      if (milliseconds > 999 || milliseconds < 0 || !millisecondsString.match(/^\d+$/)) return false;
     }
-
-    // TODO: check if seperators are not a numbers
 
     return true;
   }
