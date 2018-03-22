@@ -91,6 +91,10 @@ export class TimeTrackerPage {
 
   removeItem(i: number) {
     this.dataService.driversData.splice(i, 1);
+    // need to call ChangeDetectorRef to update Angular scope,
+    // for safety reasons, because items which were added by 
+    // RS232 connection aren't triggering change-detection
+    this.cdr.detectChanges();
   }
 
   acceptItem(driver: Driver, i: number) {
@@ -268,8 +272,8 @@ export class TimeTrackerPage {
             time: this.rs232Received
           });
           // need to call ChangeDetectorRef to update Angular scope
-          // because subscriptions are outside the Angular scope 
-          // and when an update arrives change-detection is not run
+          // because subscriptions to RS232 port are outside of the Angular scope 
+          // and when an update arrives change-detection is triggered
           this.cdr.detectChanges();
 
           setTimeout(() => {
