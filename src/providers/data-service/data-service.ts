@@ -58,5 +58,4 @@ export interface Driver {
   number: string;
   name: string;
   time: string;
-  empty: boolean;
 }

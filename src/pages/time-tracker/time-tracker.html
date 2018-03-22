@@ -38,12 +38,13 @@
           <ion-row>
             <ion-col ion-item col-4 text-center>
               <ion-label stacked>Car Nr.</ion-label>
-              <ion-input id="carNumber" type="number" maxlength="3" [(ngModel)]="driver.number" name="number" (ionChange)='mapDriversByCarNumber($event, driver)'
+              <ion-input #carNumberInput type="number" placeholder="NNN" maxlength="3" [(ngModel)]="driver.number" name="number" (ionChange)='mapDriversByCarNumber($event, driver)'
                 class="driver-card__number-input"></ion-input>
             </ion-col>
             <ion-col ion-item col-8 text-center>
               <ion-label stacked>Time</ion-label>
-              <ion-input type="tel" maxlength="12" [(ngModel)]="driver.time" name="time" (ionBlur)='onInputBlur($event, driver)' class="driver-card__time-input"></ion-input>
+              <ion-input type="tel" placeholder="{{ selectedPoint.timeFormat }}" maxlength="{{ selectedPoint.timeFormat.length }}" [(ngModel)]="driver.time"
+                name="time" (ngModelChange)="replaceDelimiter(driver)" class="driver-card__time-input"></ion-input>
             </ion-col>
           </ion-row>
         </ion-card-content>

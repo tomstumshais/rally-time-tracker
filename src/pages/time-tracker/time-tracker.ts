@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, ToastController } from 'ionic-angular';
 import { Serial } from '@ionic-native/serial';
 
@@ -9,6 +9,8 @@ import { DataServiceProvider, Driver } from "../../providers/data-service/data-s
   templateUrl: 'time-tracker.html',
 })
 export class TimeTrackerPage {
+
+  @ViewChild('carNumberInput') carNumberInput;
 
   parameters: any;
   drivers: any;
@@ -59,16 +61,6 @@ export class TimeTrackerPage {
     }
   }
 
-  // handle input blur event and set empty flag to false
-  onInputBlur(event: any, driver: Driver) {
-    const value = event.value;
-
-    if (value) {
-      // some value entered and now driver object is used
-      driver.empty = false;
-    }
-  }
-
   mapDriversByCarNumber(event: any, driver: Driver) {
     const value = event.value;
 
@@ -81,17 +73,18 @@ export class TimeTrackerPage {
     } else {
       driver.name = '';
     }
-
-    // set empty flag
-    this.onInputBlur(event, driver);
   }
 
   addItem() {
     this.dataService.driversData.push({
       number: '',
       name: '',
-      time: '',
-      empty: true
+      time: ''
+    });
+
+    setTimeout(() => {
+      // TODO: fix, set input always for first item
+      this.carNumberInput.setFocus();
     });
   }
 
@@ -100,7 +93,7 @@ export class TimeTrackerPage {
   }
 
   acceptItem(driver: Driver, i: number) {
-    if (!driver.empty) {
+    if (this.validateItem(driver)) {
       // add to send array
       this.dataService.readyToSendData.push({
         PointsID: this.selectedPoint.ID,
@@ -111,13 +104,17 @@ export class TimeTrackerPage {
       // remove added item
       this.dataService.driversData.splice(i, 1);
     } else {
-      this.showToast("Can't send empty item!");
+      this.showToast("Car number and/or time are not valid, please check it!");
     }
   }
 
   validateItem(driver: Driver): boolean {
+    // trim spaces
+    driver.number = driver.number.trim();
+    driver.time = driver.time.trim();
     // number is from 1 - 999
-    if (parseInt(driver.number) > 999 || parseInt(driver.number) < 1) return false;
+    const driverNumber = parseInt(driver.number);
+    if (driverNumber > 999 || driverNumber < 1 || isNaN(driverNumber)) return false;
 
     // time with correct length
     const timeLength = driver.time.length;
@@ -148,6 +145,29 @@ export class TimeTrackerPage {
     // TODO: check if seperators are not a numbers
 
     return true;
+  }
+
+  replaceDelimiter (driver: Driver) {
+    const timeLength = driver.time.length;
+
+    if (timeLength > 2) {
+      const delim = driver.time.substring(2, 3);
+      if (delim === '#' || delim === '*' || delim === '.') {
+        driver.time = driver.time.substring(0, 2) + ':' + driver.time.substring(3);
+      }
+    }
+    if (timeLength > 5) {
+      const delim = driver.time.substring(5, 6);
+      if (delim === '#' || delim === '*' || delim === '.') {
+        driver.time = driver.time.substring(0, 5) + ':' + driver.time.substring(6);
+      }
+    }
+    if (timeLength > 8) {
+      const delim = driver.time.substring(8, 9);
+      if (delim === '#' || delim === '*' || delim === '.') {
+        driver.time = driver.time.substring(0, 8) + '.' + driver.time.substring(9);
+      }
+    }
   }
 
   // send data to back-end
@@ -229,7 +249,7 @@ export class TimeTrackerPage {
         if (inputTime.substr(0,2) == '  ') {
           inputTime = new Date().getHours() + ':' + inputTime.substr(3);
         }
-        inputTime = inputTime.replace(/:/g, '.');
+        // inputTime = inputTime.replace(/:/g, '.');
         
         if (identification === 'T') {
           this.rs232Received = inputTime.substr(0,12);
@@ -241,8 +261,7 @@ export class TimeTrackerPage {
           this.dataService.driversData.push({
             number: '',
             name: '',
-            time: this.rs232Received,
-            empty: false
+            time: this.rs232Received
           });
         }
         this.rs232Received = '';

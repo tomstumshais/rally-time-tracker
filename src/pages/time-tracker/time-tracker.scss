@@ -2,11 +2,13 @@ page-time-tracker {
   .ion-input {
     width: 20%;
   }
-
   .driver-card__number-input,
   .driver-card__time-input,
   .driver-card__name-label {
     font-size: 2rem !important;
     font-weight: bold;
+    ::placeholder {
+      color: rgba(0, 0, 0, 0.2) !important;
+    }
   }
 }
