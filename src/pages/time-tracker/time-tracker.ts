@@ -266,6 +266,11 @@ export class TimeTrackerPage {
             name: '',
             time: this.rs232Received
           });
+
+          setTimeout(() => {
+            // TODO: fix, set input always for first item
+            this.carNumberInput.setFocus();
+          });
         }
         this.rs232Received = '';
       } else {
