@@ -261,7 +261,7 @@ export class TimeTrackerPage {
         
         if (identification === 'T') {
           this.rs232Received = inputTime.substr(0,12);
-          this.showToast(this.rs232Received);
+          // this.showToast(this.rs232Received);
 
           // cut string for correct format length
           this.rs232Received = this.rs232Received.substring(0, this.selectedPoint.timeFormat.length);
