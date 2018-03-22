@@ -74,14 +74,26 @@ export class TimeTrackerPage {
     } else {
       driver.name = '';
     }
+
+    // for RS232 port:
+    // need to call ChangeDetectorRef to update Angular scope
+    // because subscriptions to RS232 port are outside of the Angular scope 
+    // and when an update arrives change-detection is triggered or delayed
+    this.cdr.detectChanges();
   }
 
-  addItem() {
+  addItem(time: string = '') {
     this.dataService.driversData.push({
       number: '',
       name: '',
       time: ''
     });
+
+    // for RS232 port:
+    // need to call ChangeDetectorRef to update Angular scope
+    // because subscriptions to RS232 port are outside of the Angular scope 
+    // and when an update arrives change-detection is triggered or delayed
+    this.cdr.detectChanges();
 
     setTimeout(() => {
       // TODO: fix, set input always for first item
@@ -91,9 +103,10 @@ export class TimeTrackerPage {
 
   removeItem(i: number) {
     this.dataService.driversData.splice(i, 1);
+    // for RS232 port:
     // need to call ChangeDetectorRef to update Angular scope,
     // for safety reasons, because items which were added by 
-    // RS232 connection aren't triggering change-detection
+    // RS232 connection aren't triggering change-detection or delayed with it
     this.cdr.detectChanges();
   }
 
@@ -247,9 +260,7 @@ export class TimeTrackerPage {
       }
 
       if (eNext.value[1] === 13) {
-        // Dati ir sanemti, jaieliek saraksta jauns rezultats
-        // Laika izparseshana no sanjemtiem datiem
-        
+        // receive data, parse data and add to array
         const identification = this.rs232Received.substr(0, 1);
         // const competitornumber = this.rs232Received.substr(7,4); // not use
         // const inputchannel     = this.rs232Received.substr(12,2); // not use
@@ -257,7 +268,6 @@ export class TimeTrackerPage {
         if (inputTime.substr(0,2) == '  ') {
           inputTime = new Date().getHours() + ':' + inputTime.substr(3);
         }
-        // inputTime = inputTime.replace(/:/g, '.');
         
         if (identification === 'T') {
           this.rs232Received = inputTime.substr(0,12);
@@ -265,21 +275,8 @@ export class TimeTrackerPage {
 
           // cut string for correct format length
           this.rs232Received = this.rs232Received.substring(0, this.selectedPoint.timeFormat.length);
-          // push received data from RS232 to UI
-          this.dataService.driversData.push({
-            number: '',
-            name: '',
-            time: this.rs232Received
-          });
-          // need to call ChangeDetectorRef to update Angular scope
-          // because subscriptions to RS232 port are outside of the Angular scope 
-          // and when an update arrives change-detection is triggered
-          this.cdr.detectChanges();
-
-          setTimeout(() => {
-            // TODO: fix, set input always for first item
-            this.carNumberInput.setFocus();
-          });
+          // add new card item to UI with received time
+          this.addItem(this.rs232Received);
         }
         this.rs232Received = '';
       } else {
