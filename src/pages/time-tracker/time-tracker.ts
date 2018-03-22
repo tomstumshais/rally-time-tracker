@@ -104,7 +104,7 @@ export class TimeTrackerPage {
       // remove added item
       this.dataService.driversData.splice(i, 1);
     } else {
-      this.showToast("Car number and/or time are not valid, please check it!");
+      this.showToast("Not valid car number and/or time, please check it!");
     }
   }
 
