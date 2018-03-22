@@ -95,10 +95,14 @@ export class TimeTrackerPage {
     // and when an update arrives change-detection isn't triggered or delayed
     this.cdr.detectChanges();
 
-    setTimeout(() => {
-      // TODO: fix, set input always for first item
-      this.carNumberInput.setFocus();
-    });
+    // if add item manually, then focus on first input only if it's first card
+    // if add item from rs232, then focus on first input only if there isn't any other active focus
+    const currentElement = document.activeElement.tagName;
+    if ((currentElement === 'BUTTON' && this.dataService.driversData.length === 1) || (currentElement !== 'BUTTON' && currentElement !== 'INPUT')) {
+      setTimeout(() => {
+        this.carNumberInput.setFocus();
+      });
+    }
   }
 
   removeItem(i: number) {
