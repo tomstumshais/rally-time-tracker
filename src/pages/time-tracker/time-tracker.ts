@@ -78,7 +78,7 @@ export class TimeTrackerPage {
     // for RS232 port:
     // need to call ChangeDetectorRef to update Angular scope
     // because subscriptions to RS232 port are outside of the Angular scope 
-    // and when an update arrives change-detection is triggered or delayed
+    // and when an update arrives change-detection isn't triggered or delayed
     this.cdr.detectChanges();
   }
 
@@ -92,7 +92,7 @@ export class TimeTrackerPage {
     // for RS232 port:
     // need to call ChangeDetectorRef to update Angular scope
     // because subscriptions to RS232 port are outside of the Angular scope 
-    // and when an update arrives change-detection is triggered or delayed
+    // and when an update arrives change-detection isn't triggered or delayed
     this.cdr.detectChanges();
 
     setTimeout(() => {
@@ -106,7 +106,7 @@ export class TimeTrackerPage {
     // for RS232 port:
     // need to call ChangeDetectorRef to update Angular scope,
     // for safety reasons, because items which were added by 
-    // RS232 connection aren't triggering change-detection or delayed with it
+    // RS232 connection aren't triggering change-detection or delaying with it
     this.cdr.detectChanges();
   }
 
