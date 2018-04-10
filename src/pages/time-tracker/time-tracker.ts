@@ -29,7 +29,7 @@ export class TimeTrackerPage {
   };
 
   constructor(
-    public navCtrl: NavController, 
+    public navCtrl: NavController,
     public navParams: NavParams,
     private toastCtrl: ToastController,
     private cdr: ChangeDetectorRef,
@@ -50,7 +50,7 @@ export class TimeTrackerPage {
       if (param.Code === "ResendIntensity") this.resendIntensity = (param.Value * 1000);
     });
   }
-  
+
   ionViewDidLoad() {
     // call constantly send data method after configured intensity
     if (this.dataService.intervalTask === undefined) {
@@ -60,6 +60,12 @@ export class TimeTrackerPage {
         this.sendData();
       }, this.resendIntensity);
     }
+
+    // for RS232 port:
+    // need to call ChangeDetectorRef to update Angular scope
+    // because subscriptions to RS232 port are outside of the Angular scope
+    // and when an update arrives change-detection isn't triggered or delayed
+    this.cdr.detectChanges();
   }
 
   mapDriversByCarNumber(event: any, driver: Driver) {
@@ -77,7 +83,7 @@ export class TimeTrackerPage {
 
     // for RS232 port:
     // need to call ChangeDetectorRef to update Angular scope
-    // because subscriptions to RS232 port are outside of the Angular scope 
+    // because subscriptions to RS232 port are outside of the Angular scope
     // and when an update arrives change-detection isn't triggered or delayed
     this.cdr.detectChanges();
   }
@@ -91,7 +97,7 @@ export class TimeTrackerPage {
 
     // for RS232 port:
     // need to call ChangeDetectorRef to update Angular scope
-    // because subscriptions to RS232 port are outside of the Angular scope 
+    // because subscriptions to RS232 port are outside of the Angular scope
     // and when an update arrives change-detection isn't triggered or delayed
     this.cdr.detectChanges();
 
@@ -109,7 +115,7 @@ export class TimeTrackerPage {
     this.dataService.driversData.splice(i, 1);
     // for RS232 port:
     // need to call ChangeDetectorRef to update Angular scope,
-    // for safety reasons, because items which were added by 
+    // for safety reasons, because items which were added by
     // RS232 connection aren't triggering change-detection or delaying with it
     this.cdr.detectChanges();
   }
@@ -147,12 +153,12 @@ export class TimeTrackerPage {
     const hoursString = driver.time.substring(0, 2);
     const hours = parseInt(hoursString);
     if (hours > 23 || hours < 0 || !hoursString.match(/^\d+$/)) return false;
-    
+
     // correct minutes
     const minutesString = driver.time.substring(3, 5);
     const minutes = parseInt(minutesString);
     if (minutes > 59 || minutes < 0 || !minutesString.match(/^\d+$/)) return false;
-    
+
     // for time format there always will be at least hours and minutes
     // need to pre-check if exists seconds and milliseconds
     // correct seconds
@@ -272,7 +278,7 @@ export class TimeTrackerPage {
         if (inputTime.substr(0,2) == '  ') {
           inputTime = new Date().getHours() + ':' + inputTime.substr(3);
         }
-        
+
         if (identification === 'T') {
           this.rs232Received = inputTime.substr(0,12);
           // this.showToast(this.rs232Received);
@@ -295,7 +301,7 @@ export class TimeTrackerPage {
       duration: 3000,
       position: 'bottom'
     });
-  
+
     toast.present();
   }
 
