@@ -1,6 +1,6 @@
 # Rally Time Tracker
 
-Rally time tracker app to track time for each checkpoint in map. Connected with OTG/Serial port to get data from time measure hardware. When car drive through checkpoint, time measure hardware track it's race time and send it to app. App is open and time comes in and fills driver's row with time. User need to enter driver's number and send those data to back-end. Race times for all drivers are gathered in back-end. 
+Rally time tracker app is for to track time for each checkpoint in map. Connected with OTG/Serial port to get data from time measure hardware. When car drive through checkpoint, time measure hardware track it's race time and send it to app. App is open and time comes in through Serial port and fills driver's row with time. User need to enter driver's number and send those data to back-end. Race times for all drivers are gathered in back-end. 
 
 ## Getting Started
 
