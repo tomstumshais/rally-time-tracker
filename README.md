@@ -21,14 +21,14 @@ To get this Ionic app copy working on your local machine you need:
 * run in your CLI command: `npm install -g ionic cordova` to install Ionic & Cordova
 * clone or download project
 * go to project root directory ./
-* run in CLI command `npm install` to install project dependencies
+* run in your CLI command `npm install` to install project dependencies
 
 ## Deployment
 
 ### Test in web browser
 
 (main app's functionality will not work because web browsers are not supporting Ionic Native Serial plugin)
-* run in CLI command: `ionic serve`
+* run in your CLI command: `ionic serve`
 * now wait till app loads in your default web browser
 * if you are using Google Chrome, you can open Developer tools (Ctrl+Shift+I)
 * then open Device toolbar (small mobile/tablet icon at the left top side or just use keyboard shortcut: Ctrl+Shift+M)
@@ -42,7 +42,7 @@ To get this Ionic app copy working on your local machine you need:
 * updated Android SDK tools, platform and component dependencies. Available through [Android Studio’s SDK Manager](https://developer.android.com/studio/intro/update.html)
 * enable USB debugging and developer mode on your Android device
 * enabling USB debugging and Developer Mode can vary between devices, but is easy to look up with a Google search. You can also check out Enabling On-device Developer Options in the [Android docs](https://developer.android.com/studio/run/device.html#developer-device-options)
-* run in CLI command: `ionic cordova run android --device`
+* run in your CLI command: `ionic cordova run android --device`
 
 Now you are ready to play with it!
 
