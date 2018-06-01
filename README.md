@@ -13,6 +13,7 @@ To get this Ionic app copy working on your local machine you need:
 * Ionic 3.20.0+ (just version below Ionic 4, because project is not aligned to changes which are made in Ionic 4)
 * Cordova 8.0.0+
 * OTG/Serial port device/simulator with correct connector
+
 (these are versions which I am using for my development environment, probably could work older versions too, not tested)
 
 ### Installing
