@@ -122,7 +122,6 @@ export class TimeTrackerPage {
       (currentElement !== "BUTTON" && currentElement !== "INPUT")
     ) {
       setTimeout(() => {
-        //this.carNumberInput.setFocus();
         var tt = document.getElementsByName("number");
         for (var i = 0; i < tt.length; i++) {
           if (tt[i].tagName === "INPUT") {
@@ -130,9 +129,6 @@ export class TimeTrackerPage {
           }
         }
       }, 100);
-      //      setTimeout(() => {
-      //        this.carNumberInput.setFocus();
-      //      });
     }
   }
 
@@ -258,7 +254,6 @@ export class TimeTrackerPage {
           );
         },
         (error: any) => {
-          // this.showToast('Service error, please try again later or contact your admin!');
           console.log("Service error: ", error);
         }
       );
@@ -310,7 +305,7 @@ export class TimeTrackerPage {
     const uint8buffer = new Uint8Array(data);
     const charIterator = uint8buffer.entries();
     let eNext;
-    var startTimeChar = 0; // Default for Tag Heuer 520
+    let startTimeChar = 0; // Default for Tag Heuer 520
 
     while (true) {
       eNext = charIterator.next();
@@ -320,7 +315,7 @@ export class TimeTrackerPage {
 
       if (eNext.value[1] === 13) {
         // receive data, parse data and add to array
-        const identification = this.rs232Received.substr(0, 1);
+        // const identification = this.rs232Received.substr(0, 1); // currently not using
         // detect stopwatch type.
         // TagHeuer 520:       time start from 15th character
         // TagHeuer 540:       time: start from 16th character
@@ -356,15 +351,13 @@ export class TimeTrackerPage {
           inputTime = "00" + inputTime.substr(2);
         }
 
-        //        if (identification === 'T') { // TagHeuer 520, 540
+        // if (identification === 'T') { // TagHeuer 520, 540 // currently not using
         this.rs232Received = inputTime.substr(0, 12);
-        // this.showToast(this.rs232Received);
 
         // cut string for correct format length
         this.rs232Received = this.rs232Received.substring(0, this.dataService.selectedType.length);
         // add new card item to UI with received time
         this.addItem(true, this.rs232Received);
-        //        }
         this.rs232Received = "";
       } else {
         if (eNext.value[1] !== 10) {
