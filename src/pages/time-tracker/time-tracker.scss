@@ -28,20 +28,17 @@ page-time-tracker {
   .item-inner {
     padding-right: 0px !important;
   }
-}
-
-.scroll-content {
-  padding-bottom: 20px !important;
-  margin-bottom: 20px !important;
-}
-
-.fixed-content {
-  padding-bottom: 20px !important;
-  margin-bottom: 20px !important;
-}
-
-ion-footer {
-  &.footer-md::before {
-    background-image: none;
+  .scroll-content {
+    padding-bottom: 20px !important;
+    margin-bottom: 20px !important;
+  }
+  .fixed-content {
+    padding-bottom: 20px !important;
+    margin-bottom: 20px !important;
+  }
+  ion-footer {
+    &.footer-md::before {
+      background-image: none;
+    }
   }
 }

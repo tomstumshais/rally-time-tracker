@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title text-center>Results History</ion-title>
+  </ion-navbar>
+
+  <ion-toolbar color="primary">
+    <ion-title text-center>{{ selectedPoint.Name }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content no-padding>
+  <ion-grid>
+    <ion-row justify-content-center>
+      <ion-list>
+        <ion-item *ngFor="let result of resultsHistory">
+          Number: {{ result.number }} Time: {{ result.time }}
+        </ion-item>
+      </ion-list>
+    </ion-row>
+  </ion-grid>
+</ion-content>

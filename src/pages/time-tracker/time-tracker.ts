@@ -2,6 +2,7 @@ import { Component, ViewChild, ChangeDetectorRef, ApplicationRef } from "@angula
 import { NavController, NavParams, ToastController } from "ionic-angular";
 import { Serial } from "@ionic-native/serial";
 
+import { ResultsHistoryPage } from "../results-history/results-history";
 import { DataServiceProvider, Driver } from "../../providers/data-service/data-service";
 
 @Component({
@@ -365,6 +366,12 @@ export class TimeTrackerPage {
         }
       }
     }
+  }
+
+  goToHistory() {
+    this.navCtrl.push(ResultsHistoryPage, {
+      selectedPoint: this.selectedPoint
+    });
   }
 
   showToast(message: string) {
