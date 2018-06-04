@@ -1,18 +1,20 @@
 <ion-header>
-
   <ion-navbar>
     <ion-title text-center>Time Tracker</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="openModal()">
+        <ion-icon name="arrow-forward"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
   <ion-toolbar color="primary">
     <ion-title text-center>{{ selectedPoint.Name }}</ion-title>
   </ion-toolbar>
-
 </ion-header>
 
 
 <ion-content no-padding>
-
   <ion-grid>
     <ion-row justify-content-center>
       <ion-card *ngFor="let driver of dataService.driversData; let i = index" class="driver-card">
@@ -37,26 +39,24 @@
         <ion-card-content no-padding padding-horizontal>
           <ion-row>
             <ion-col ion-item col-4 text-center>
-              <ion-label stacked>Car Nr.</ion-label>
-              <ion-input #carNumberInput type="number" placeholder="NNN" maxlength="3" [(ngModel)]="driver.number" name="number" (ionChange)='mapDriversByCarNumber($event, driver)'
-                class="driver-card__number-input"></ion-input>
+              <ion-label stacked>Car No</ion-label>
+              <ion-input #carNumberInput type="tel" placeholder="NNN" [brmasker]="{mask: '000', len:3}" maxlength="3" [(ngModel)]="driver.number"
+                name="number" (ionChange)='mapDriversByCarNumber($event, driver)' class="driver-card__number-input"></ion-input>
             </ion-col>
             <ion-col ion-item col-8 text-center>
               <ion-label stacked>Time</ion-label>
-              <ion-input type="tel" placeholder="{{ selectedPoint.timeFormat }}" maxlength="{{ selectedPoint.timeFormat.length }}" [(ngModel)]="driver.time"
-                name="time" (ngModelChange)="replaceDelimiter(driver)" class="driver-card__time-input"></ion-input>
+              <ion-input type="tel" placeholder="{{ selectedPoint.timeFormat }}" [brmasker]="{mask: selectedPoint.timeMask, len:selectedPoint.timeFormat.length}"
+                maxlength="{{ selectedPoint.timeFormat.length }}" [(ngModel)]="driver.time" name="time" (ngModelChange)="replaceDelimiter(driver)"
+                class="driver-card__time-input"></ion-input>
             </ion-col>
           </ion-row>
         </ion-card-content>
       </ion-card>
     </ion-row>
   </ion-grid>
-
 </ion-content>
 
 
 <ion-footer>
-
-  <button ion-button block outline (click)="addItem()">Add New Driver</button>
-
+  <button ion-button block full color="secondary" (click)="addItem(false)">Add New Driver</button>
 </ion-footer>

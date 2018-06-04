@@ -1,5 +1,4 @@
 <ion-header>
-
   <ion-navbar>
     <ion-title text-center>Checkpoints</ion-title>
   </ion-navbar>
@@ -7,7 +6,6 @@
   <ion-toolbar color="primary">
     <ion-title text-center>{{ eventName }}</ion-title>
   </ion-toolbar>
-
 </ion-header>
 
 
@@ -15,13 +13,15 @@
   <ion-grid>
     <ion-row justify-content-center>
       <ion-col col-12 col-sm-8 col-md-5 col-lg-4 col-xl-3 text-center>
-        <ion-item>
+        <ion-item margin-bottom>
           <ion-label stacked>Select Checkpoint</ion-label>
           <ion-select [(ngModel)]="selectedPointID">
             <ion-option *ngFor="let point of points" value="{{ point.ID }}">{{ point.Name }}</ion-option>
           </ion-select>
         </ion-item>
-        <button ion-button outline block (click)="goNext()">Next</button>
+        <ion-item no-lines>
+        </ion-item>
+        <button ion-button color="secondary" block (click)="goNext()">Next</button>
       </ion-col>
     </ion-row>
   </ion-grid>

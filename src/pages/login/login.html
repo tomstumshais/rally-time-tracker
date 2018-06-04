@@ -1,9 +1,11 @@
 <ion-header>
-
   <ion-navbar>
     <ion-title text-center>Rally Time Tracker</ion-title>
   </ion-navbar>
 
+  <ion-toolbar color="primary">
+    <ion-title text-center></ion-title>
+  </ion-toolbar>
 </ion-header>
 
 
@@ -11,11 +13,13 @@
   <ion-grid>
     <ion-row justify-content-center>
       <ion-col col-12 col-sm-8 col-md-5 col-lg-4 col-xl-3 text-center>
-        <ion-item>
+        <ion-item margin-bottom>
           <ion-label stacked>Access Code:</ion-label>
-          <ion-input type="number" [(ngModel)]="accessCode" class="login__access-code"></ion-input>
+          <ion-input type="tel" [(ngModel)]="accessCode" class="login__access-code"></ion-input>
         </ion-item>
-        <button ion-button outline block (click)="checkAccessCode()">Go</button>
+        <ion-item no-lines>
+        </ion-item>
+        <button ion-button color="secondary" block (click)="checkAccessCode()">Next</button>
       </ion-col>
     </ion-row>
   </ion-grid>

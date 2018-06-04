@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Serial } from '@ionic-native/serial';
 import { HttpClientModule } from '@angular/common/http';
+import { BrMaskerModule } from 'brmasker-ionic-3';
 
 import { MyApp } from './app.component';
 import { LoginPage } from '../pages/login/login';
@@ -22,7 +23,13 @@ import { DataServiceProvider } from '../providers/data-service/data-service';
   imports: [
     BrowserModule,
     HttpClientModule,
-    IonicModule.forRoot(MyApp)
+    BrMaskerModule,
+    IonicModule.forRoot(MyApp
+    , {
+            scrollAssist: true,    // Valid options appear to be [true, false]
+            autoFocusAssist: false  // Valid options appear to be ['instant', 'delay', false]
+      }    
+    )
   ],
   bootstrap: [IonicApp],
   entryComponents: [

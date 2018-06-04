@@ -2,13 +2,46 @@ page-time-tracker {
   .ion-input {
     width: 20%;
   }
-  .driver-card__number-input,
-  .driver-card__time-input,
   .driver-card__name-label {
     font-size: 2rem !important;
     font-weight: bold;
+  }
+  .driver-card__number-input,
+  .driver-card__time-input {
+    font-size: 3rem !important;
+    font-weight: bold;
     ::placeholder {
       color: rgba(0, 0, 0, 0.2) !important;
+      font-size: 2rem !important;
     }
+  }
+  ion-label {
+    font-size: 1.6rem !important;
+  }
+  .label-md {
+    margin: 0 0 0 0 !important;
+  }
+  .card-content-md {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+  }
+  .item-inner {
+    padding-right: 0px !important;
+  }
+}
+
+.scroll-content {
+  padding-bottom: 20px !important;
+  margin-bottom: 20px !important;
+}
+
+.fixed-content {
+  padding-bottom: 20px !important;
+  margin-bottom: 20px !important;
+}
+
+ion-footer {
+  &.footer-md::before {
+    background-image: none;
   }
 }

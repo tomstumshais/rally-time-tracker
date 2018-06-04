@@ -1,5 +1,29 @@
 page-checkpoints {
   ion-grid {
-    margin-top: 20vh;
+    margin-top: 5vh;
   }
+  ion-label,
+  .select-text {
+    font-size: 2rem !important;
+  }
+}
+
+.alert-radio-label {
+  font-size: 2rem;
+}
+
+.alert-wrapper {
+  min-width: 70% !important;
+}
+
+.alert-radio-group {
+  max-height: 60vh !important;
+}
+
+.alert-button {
+  font-size: 2rem !important;
+}
+
+.alert-radio-label {
+  padding: 13px 36px !important;
 }

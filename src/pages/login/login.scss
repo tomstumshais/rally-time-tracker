@@ -1,9 +1,12 @@
 page-login {
   ion-grid {
-    margin-top: 20vh;
+    margin-top: 5vh;
   }
   .login__access-code {
     font-size: 2rem !important;
     font-weight: bold;
+  }
+  ion-label {
+    font-size: 2rem !important;
   }
 }
