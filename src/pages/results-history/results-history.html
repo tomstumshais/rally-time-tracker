@@ -10,13 +10,23 @@
 
 
 <ion-content no-padding>
-  <ion-grid>
-    <ion-row justify-content-center>
-      <ion-list>
-        <ion-item *ngFor="let result of resultsHistory">
-          Number: {{ result.number }} Time: {{ result.time }}
-        </ion-item>
-      </ion-list>
+  <ion-grid class="history-table">
+    <ion-row class="history-table__header-row">
+      <ion-col col-4 text-center>
+        No
+      </ion-col>
+      <ion-col col-8 text-center>
+        Time
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngFor="let result of resultsHistory" class="history-table__table-row">
+      <ion-col col-4 text-center>
+        {{ result.number }}
+      </ion-col>
+      <ion-col col-8 text-center>
+        {{ result.time }}
+      </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>

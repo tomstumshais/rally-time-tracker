@@ -1,3 +1,21 @@
 page-results-history {
-
+  $history-table-border: 2px solid #c8c7cc;
+  .history-table__header-row ion-col {
+    background-color: #f8f8f8;
+    border-top: $history-table-border;
+    border-left: $history-table-border;
+    border-bottom: $history-table-border;
+  }
+  .history-table__table-row ion-col {
+    border-bottom: $history-table-border;
+    border-left: $history-table-border;
+  }
+  .history-table__header-row ion-col:last-child,
+  .history-table__table-row ion-col:last-child {
+    border-right: $history-table-border;
+  }
+  .history-table ion-col {
+    font-size: 3rem !important;
+    font-weight: bold;
+  }
 }
