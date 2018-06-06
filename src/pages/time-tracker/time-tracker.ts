@@ -330,7 +330,7 @@ export class TimeTrackerPage {
         } else if (this.rs232Received.indexOf(":") == 18) {
           // TagHeuer 540
           startTimeChar = 16;
-        } else {
+        } else if (this.rs232Received.length > 15) {
           // Unknown stopwatch
           startTimeChar = this.rs232Received.indexOf(":");
           if (startTimeChar != -1) {
@@ -339,26 +339,30 @@ export class TimeTrackerPage {
             startTimeChar = 15;
           }
         }
-        // const competitornumber = this.rs232Received.substr(7,4); // not use
-        // const inputchannel     = this.rs232Received.substr(12,2); // not use
-        var inputTime = this.rs232Received.substr(startTimeChar, 15);
-        if (inputTime.substr(0, 2) == "  ") {
-          inputTime = new Date().getHours() + ":" + inputTime.substr(3);
-        }
-        if (inputTime.substr(0, 1) == " ") {
-          inputTime = "0" + inputTime.substr(1);
-        }
-        if (inputTime.substr(0, 2) == "  ") {
-          inputTime = "00" + inputTime.substr(2);
-        }
+        // const competitornumber = this.rs232Received.substr(7,4); // currently not using
+        // const inputchannel     = this.rs232Received.substr(12,2); // currently not using
+        if (startTimeChar > 0) {
+          var inputTime = this.rs232Received.substr(startTimeChar, 15);
+          if (inputTime.substr(0, 2) == "  ") {
+            inputTime = new Date().getHours() + ":" + inputTime.substr(3);
+          }
+          if (inputTime.substr(0, 1) == " ") {
+            inputTime = "0" + inputTime.substr(1);
+          }
+          if (inputTime.substr(0, 2) == "  ") {
+            inputTime = "00" + inputTime.substr(2);
+          }
 
-        // if (identification === 'T') { // TagHeuer 520, 540 // currently not using
-        this.rs232Received = inputTime.substr(0, 12);
+          this.rs232Received = inputTime.substr(0, 12);
 
-        // cut string for correct format length
-        this.rs232Received = this.rs232Received.substring(0, this.dataService.selectedType.length);
-        // add new card item to UI with received time
-        this.addItem(true, this.rs232Received);
+          // cut string for correct format length
+          this.rs232Received = this.rs232Received.substring(
+            0,
+            this.dataService.selectedType.length
+          );
+          // add new card item to UI with received time
+          this.addItem(true, this.rs232Received);
+        }
         this.rs232Received = "";
       } else {
         if (eNext.value[1] !== 10) {
