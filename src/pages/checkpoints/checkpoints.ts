@@ -14,6 +14,7 @@ export class CheckpointsPage {
   points: any;
   selectedPointID: string = "";
   eventName: string = "";
+  lastSelectedPointID: string = "";
 
   constructor(
     public navCtrl: NavController,
@@ -42,7 +43,11 @@ export class CheckpointsPage {
       });
 
       // clear history array
-      this.dataService.resultsHistory = [];
+      if (this.lastSelectedPointID !== this.selectedPointID) {
+        this.dataService.resultsHistory = [];
+      }
+      // set new Point ID which to store
+      this.lastSelectedPointID = this.selectedPointID;
 
       this.navCtrl.push(TimeTrackerPage, {
         parameters: this.parameters,
