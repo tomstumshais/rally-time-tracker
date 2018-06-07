@@ -1,5 +1,5 @@
-import { Component } from "@angular/core";
-import { NavController, NavParams } from "ionic-angular";
+import { Component, ViewChild } from "@angular/core";
+import { NavController, NavParams, Content } from "ionic-angular";
 
 import { DataServiceProvider } from "../../providers/data-service/data-service";
 
@@ -8,6 +8,7 @@ import { DataServiceProvider } from "../../providers/data-service/data-service";
   templateUrl: "results-history.html"
 })
 export class ResultsHistoryPage {
+  @ViewChild(Content) content: Content;
   selectedPoint: object;
   resultsHistory: Array<object>;
 
@@ -20,7 +21,10 @@ export class ResultsHistoryPage {
     this.resultsHistory = this.dataService.resultsHistory;
   }
 
-  ionViewDidLoad() {
-    // ...
+  ionViewWillEnter() {
+    // scroll content to bottom
+    setTimeout(() => {
+      this.content.scrollToBottom(0);
+    }, 100);
   }
 }
