@@ -42,3 +42,26 @@ page-time-tracker {
     }
   }
 }
+
+// style forward button in header bar for specific platform
+// Android
+.md {
+  .header__buttons {
+    button {
+      margin: 0 6px !important;
+      padding: 0 5px !important;
+    }
+    span {
+      min-width: 34px;
+    }
+  }
+}
+
+// iOS
+.ios {
+  .header__buttons {
+    ion-icon {
+      font-size: 3.4rem;
+    }
+  }
+}
